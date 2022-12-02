@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, StyleSheet, View, FlatList, StatusBar, Image, Pressable  } from 'react-native';
 import { Button, ListItem } from '@rneui/base';
 import  AsyncStorage  from  '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -9,6 +10,16 @@ import  AsyncStorage  from  '@react-native-async-storage/async-storage';
 export default function MyCollection({ navigation }) {
 
   const [savedData, setSavedData] = useState([]);
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      updateData();
+      return () => {
+      };
+    }, [])
+  );
+
 
   useEffect(() => {
     const findData = async () => {
@@ -37,12 +48,10 @@ export default function MyCollection({ navigation }) {
       if (keys !== null) {
         await AsyncStorage.multiGet(keys).then(key => {
           key.forEach(data => {
-            console.log(data[1] + " tämä on dataa")
             const parsed = JSON.parse(data[1])
             setSavedData(savedData => [...savedData, parsed])
           })
         });
-        console.log('jee')
       }
     } catch (e) {
       Alert.alert('Error getting data')
@@ -59,9 +68,13 @@ export default function MyCollection({ navigation }) {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress: () => AsyncStorage.clear() }
+        { text: "OK", onPress: () =>  clearStorage()}
       ]
     );
+  }
+  const clearStorage = () => {
+    AsyncStorage.clear()
+    updateData();
   }
 
   const checkInfo = (number) => {
@@ -77,7 +90,6 @@ export default function MyCollection({ navigation }) {
 
     return (
         <View style={styles.container}>
-          <Button onPress={updateData} title=" REFRESH COLLECTION " buttonStyle={{backgroundColor:'#FCC56B', borderRadius:20}} titleStyle={{color:'black'}}></Button>
           <StatusBar hidden={true} />
           <FlatList 
             style={{width: '85%' }}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, StyleSheet, Text, View, FlatList, StatusBar, Image, Pressable  } from 'react-native';
 import { Icon, ListItem } from '@rneui/base';
 import  AsyncStorage  from  '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export default function TemtemList({ navigation }) {
@@ -9,7 +10,14 @@ export default function TemtemList({ navigation }) {
   const [temtems, setTemtems] = useState([]);
   const [temInCollection, setTemInCollection] = useState([]);
   
-  
+  useFocusEffect(
+    React.useCallback(() => {
+      findData();
+      return () => {
+      };
+    }, [])
+  );
+
   useEffect(() => {
     fetch(`https://temtem-api.mael.tech/api/temtems/`)
       .then(response => response.json())

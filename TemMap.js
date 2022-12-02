@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Button, Alert, Image } from 'react-native';
+import { StyleSheet, View, Text, Button, Alert, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import googleMapStyle from './GoogleMapStyle.json';
 import * as Location from 'expo-location';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -13,10 +14,17 @@ export default function TemMap({navigation}) {
     const [location, setLocation] = useState([null]); // State where location is saved
     const [lat, setLat] = useState(60.201373);
     const [lng, setLng] = useState(24.934041);
-    const [number, setNumber] = useState(Math.floor(Math.random() * 163) + 1);
+    const [number, setNumber] = useState();
     const [temtem, setTemtem] = useState([]);
     const [randLong, setRandLong] = useState(24.934+Math.floor((Math.random() * 20) + 1) / 10000);
     const [randLat, setRandLat] = useState(60.2 + Math.floor((Math.random() * 20) + 1) / 10000);
+  
+  useFocusEffect(
+      React.useCallback(() => {
+        return () => {
+        };
+      }, [])
+    );
   
   useEffect(() => {
     (async () => {
@@ -29,7 +37,8 @@ export default function TemMap({navigation}) {
       setLat(location.coords.latitude);
       setLng(location.coords.longitude);
       setLocation(location);
-    })();
+    })
+    ()
   }, []);
 
 
@@ -58,7 +67,8 @@ export default function TemMap({navigation}) {
         });
     }, []);
 
-    const checkTem = () => {
+  const checkTem = () => {
+    findTems();
     navigation.navigate('Tem Info', {data: temtem, string: 'TemMap'})
   }
   
@@ -75,7 +85,6 @@ export default function TemMap({navigation}) {
           Alert.alert('Error', error.message);
         });
     }
-  
   
     return (
         <View style={styles.container}>
@@ -97,10 +106,11 @@ export default function TemMap({navigation}) {
             </Marker>
           </MapView>
           <View style={{ width: "100%" }}>
-                <Button onPress={() => {findTems()}} title="Find Temtems"></Button>
+                <Button onPress={() => {findTems()}} title="Find new Temtem"></Button>
           </View>
         </View>
-      );
+    );
+ 
 }
 
 
