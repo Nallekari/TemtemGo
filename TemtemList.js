@@ -28,10 +28,6 @@ export default function TemtemList({ navigation }) {
         Alert.alert('Error', error.message);
       });
   }, []);
-
-  useEffect(() => {
-    findData();
-  }, []);
   
   const findData = async () => {
     try {

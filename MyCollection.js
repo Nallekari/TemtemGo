@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Alert, StyleSheet, View, FlatList, StatusBar, Image, Pressable  } from 'react-native';
 import { Button, ListItem } from '@rneui/base';
 import  AsyncStorage  from  '@react-native-async-storage/async-storage';
@@ -20,26 +20,6 @@ export default function MyCollection({ navigation }) {
     }, [])
   );
 
-
-  useEffect(() => {
-    const findData = async () => {
-      try {
-        setSavedData([]);
-        const keys = await AsyncStorage.getAllKeys();
-        if (keys !== null) {
-          await AsyncStorage.multiGet(keys).then(key => {
-            key.forEach(data => {
-              const parsed = JSON.parse(data[1])
-              setSavedData(savedData => [...savedData, parsed])
-            })
-          });
-        }
-      } catch (e) {
-        Alert.alert('Error getting data')
-      }
-    }
-    findData();
-  }, []);
   
   const updateData = async () => {
     try {

@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, Alert, Image } from 'react-native';
+import { StyleSheet, View, Button, Alert, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import googleMapStyle from './GoogleMapStyle.json';
 import * as Location from 'expo-location';
-import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -18,13 +17,6 @@ export default function TemMap({navigation}) {
     const [temtem, setTemtem] = useState([]);
     const [randLong, setRandLong] = useState(24.934+Math.floor((Math.random() * 20) + 1) / 10000);
     const [randLat, setRandLat] = useState(60.2 + Math.floor((Math.random() * 20) + 1) / 10000);
-  
-  useFocusEffect(
-      React.useCallback(() => {
-        return () => {
-        };
-      }, [])
-    );
   
   useEffect(() => {
     (async () => {
